@@ -84,3 +84,51 @@ class TestReproducibility:
         m_b = compute_metrics(simulate(30, initial_condition="random", random_seed=8))
         # Not guaranteed to differ for all rules but almost certain for rule 30
         assert m_a != m_b
+
+
+class TestEdgeCases:
+    def test_all_zeros_grid_density_is_zero(self):
+        grid = np.zeros((5, 20), dtype=np.uint8)
+        m = compute_metrics(grid)
+        assert m["density_mean"] == 0.0
+        assert m["density_final"] == 0.0
+
+    def test_all_zeros_grid_activity_is_zero(self):
+        grid = np.zeros((5, 20), dtype=np.uint8)
+        assert compute_metrics(grid)["activity_score"] == 0.0
+
+    def test_all_zeros_grid_transition_count_is_zero(self):
+        grid = np.zeros((5, 20), dtype=np.uint8)
+        assert compute_metrics(grid)["transition_count"] == 0.0
+
+    def test_all_zeros_grid_periodicity_is_one(self):
+        # Every consecutive row pair is identical — fixed point.
+        grid = np.zeros((10, 20), dtype=np.uint8)
+        assert compute_metrics(grid)["periodicity_score"] == 1.0
+
+    def test_all_ones_grid_density_is_one(self):
+        grid = np.ones((5, 20), dtype=np.uint8)
+        m = compute_metrics(grid)
+        assert m["density_mean"] == 1.0
+        assert m["density_final"] == 1.0
+
+    def test_single_row_activity_score_is_zero(self):
+        # n_steps=0 triggers the explicit zero branch in compute_metrics.
+        grid = simulate(30, n_cells=50, n_steps=0)
+        assert compute_metrics(grid)["activity_score"] == 0.0
+
+    def test_single_row_periodicity_score_is_zero(self):
+        # Tail has only one row; no consecutive pairs to compare.
+        grid = simulate(30, n_cells=50, n_steps=0)
+        assert compute_metrics(grid)["periodicity_score"] == 0.0
+
+    def test_compression_ratio_uniform_grid_below_one(self):
+        # A highly uniform grid should compress to a ratio well below 1.0.
+        grid = np.zeros((50, 100), dtype=np.uint8)
+        assert compute_metrics(grid)["compression_ratio"] < 0.5
+
+    def test_metrics_values_are_floats(self):
+        grid = simulate(110)
+        m = compute_metrics(grid)
+        for key, value in m.items():
+            assert isinstance(value, float), f"{key} is not a float"
