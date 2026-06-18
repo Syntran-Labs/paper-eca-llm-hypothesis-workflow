@@ -1,0 +1,68 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.env/
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb~
+
+# Local generated outputs
+outputs/
+output/
+figures/
+*.png
+*.pdf
+*.csv
+*.json.bak
+
+# Environment files
+.env
+.env.*
+*.env
+
+# SYNTRAN AIEOS / Claude Code
+.claude/
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+
+# pytest
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# mypy
+.mypy_cache/
+
+# ruff / linting
+.ruff_cache/
