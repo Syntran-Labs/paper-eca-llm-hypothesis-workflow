@@ -6,6 +6,12 @@
 
 ---
 
+## New to This Repo?
+
+Start with the [Reading Guide for Data Scientists](docs/reading-guide.md). It explains which documents to read, in what order, and what each one teaches about the research question, methodology, LLM hypothesis loop, validation artifacts, research notes, source code, and tests.
+
+---
+
 ## What This Is
 
 This repository is the public research artifact for a governed LLM-assisted science workflow. It investigates one concrete question:
