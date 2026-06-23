@@ -180,6 +180,7 @@ paper-eca-llm-hypothesis-workflow/
 │   ├── references.md               Annotated bibliography (17 references)
 │   ├── ai-hypothesis-loop.md       v2 workflow design (8 stages, manual)
 │   ├── hypothesis-quality-checklist.md
+│   ├── reading-guide.md            Onboarding reading order for first-time reviewers
 │   └── research-notes/
 │       ├── 001-first-hypothesis-review-comparison.md
 │       ├── 002-publication-positioning.md
@@ -210,7 +211,7 @@ paper-eca-llm-hypothesis-workflow/
 - **Periodicity score:** may detect boundary-induced cycles, not intrinsic periodicity
 - **Single run per configuration** — no multi-seed distributions yet
 - **Manual LLM loop** — no API integration; submission is copy-paste by design (v2); automation planned for v3 after validation
-- **One session completed** — results are preliminary and should not be interpreted as statistically reliable
+- **One LLM review session and one follow-up experiment cycle completed** — results remain preliminary and should not be interpreted as statistically reliable
 
 ---
 
