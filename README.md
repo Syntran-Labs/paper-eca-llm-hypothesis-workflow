@@ -1,8 +1,20 @@
+<div align="center">
+
 # LLM Hypothesis Workflow — ECA Testbed
+
+[![tests](https://github.com/Syntran-Labs/paper-eca-llm-hypothesis-workflow/actions/workflows/tests.yml/badge.svg)](https://github.com/Syntran-Labs/paper-eca-llm-hypothesis-workflow/actions/workflows/tests.yml)
+![Python](https://img.shields.io/badge/python-3.11%2B-blue)
+![Status](https://img.shields.io/badge/status-early%20incubation-yellow)
+![Track](https://img.shields.io/badge/track-paper%20lab-blueviolet)
+![Workflow](https://img.shields.io/badge/workflow-SYNTRAN%20AIEOS-0f766e)
+![Package](https://img.shields.io/badge/package-cellauto__lab-gray)
+[![License](https://img.shields.io/github/license/Syntran-Labs/paper-eca-llm-hypothesis-workflow)](LICENSE)
 
 **Project:** `paper-eca-llm-hypothesis-workflow` · **SYNTRAN Paper Lab** · Early Incubation  
 **Organization:** [SYNTRAN Labs](https://syntran.io) · **Workflow:** SYNTRAN AIEOS  
 **Internal package:** `cellauto_lab` · **Branch:** `main` is the current stable snapshot — see [Research Notes](docs/research-notes/) for the full trail
+
+</div>
 
 ---
 
