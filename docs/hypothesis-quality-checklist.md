@@ -1,6 +1,6 @@
 # Hypothesis Quality Checklist
 
-**Repository:** `cellauto-lab`
+**Repository:** `paper-eca-llm-hypothesis-workflow`
 **Status:** Active — used during Stage 6 of the Manual AI Hypothesis Loop
 **See also:** `docs/ai-hypothesis-loop.md`, `schemas/hypothesis_response.schema.json`
 

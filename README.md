@@ -1,15 +1,14 @@
-# cellauto-lab
+# LLM Hypothesis Workflow — ECA Testbed
 
-**Status:** Open — Early Incubation  
-**Organization:** [SYNTRAN Labs](https://syntran.io)  
-**Workflow:** SYNTRAN AIEOS  
+**Project:** `cellauto-lab` · **Organization:** [SYNTRAN Labs](https://syntran.io)  
+**Status:** Open — Early Incubation · **Workflow:** SYNTRAN AIEOS  
 **Branch:** `main` is the current stable snapshot — see [Research Notes](docs/research-notes/) for the full trail
 
 ---
 
 ## What This Is
 
-`cellauto-lab` is a governed research workspace that investigates one concrete question:
+This repository is the public research artifact for a governed LLM-assisted science workflow. It investigates one concrete question:
 
 > **Can an LLM-assisted scientific workflow generate falsifiable, non-overclaiming hypotheses — reproducibly?**
 
@@ -82,13 +81,26 @@ Each metric has a documented definition, expected range, and known limitations. 
 On 2026-06-18, the top 10 rules by behavioral interest were submitted independently to two models:
 
 - **Claude Opus 4.8 Max** — 3 hypotheses, schema-conformant
-- **ChatGPT o3** — 6 hypotheses, schema-conformant (one schema violation caught and corrected at intake)
+- **ChatGPT 5.5 (high thinking)** — 6 hypotheses, schema-conformant (one schema violation caught and corrected at intake)
 
 **Key result:** Both models independently identified the same structural pattern — 5 near-identical pairs among the 10 rules (59/115, 25/67, 97/41, 83/27, 107/121), with matching metrics to 3–5 decimal places. This corresponds to known ECA reflection-equivalence classes. Neither model cited literature. Both produced falsifiable hypotheses with specific rules, metrics, and predicted directions.
 
 This is a **methodology validation**, not a discovery. The result was expected from known ECA theory. The finding is that the governance layer worked: both models stayed within the epistemic constraints.
 
 Full analysis in [Research Note 001](docs/research-notes/001-first-hypothesis-review-comparison.md). Publication positioning in [Research Note 002](docs/research-notes/002-publication-positioning.md).
+
+### Follow-up experiments — first cycle complete (2026-06-23)
+
+Three experiments were run against the hypotheses from session 1:
+
+| Hypothesis | Experiment | Outcome |
+|---|---|---|
+| Claude h001 — mirror equivalence / odd-grid test | `n_cells=101` for all 10 rules | **supported** — reflection-invariant metrics collapsed to exactly zero within-pair differences; 107/121 density_final gap (0.12) reduced to 0.000 |
+| Claude h002 — 107/121 divergence is a centering artifact | Same experiment as h001 | **supported** — all major gaps collapsed simultaneously |
+| Claude h003 — period-2 density oscillation | `n_steps=201` for all 10 rules | **partially supported** — large swings (Δ 0.31–0.35) for rules 83/27/107/121; negligible for 59/115/25/67 |
+| ChatGPT h003 — rank stability at longer runs | `n_steps=400` for rules 97/41/25/67 | **supported** — rank ordering preserved; compression_ratio gap widened |
+
+Full results in [Research Note 003](docs/research-notes/003-follow-up-experiments-results.md). Schema extended to add `supported`, `partially_supported`, `refuted` statuses.
 
 ---
 
@@ -98,15 +110,14 @@ These are the gaps between current state and any external publication:
 
 | Gap | Why it matters |
 |---|---|
-| Follow-up experiments not executed | All hypotheses are still `proposed` — none confirmed or refuted |
-| Baseline comparison not run | No evidence that governed > unstructured prompting yet |
-| Negative controls not designed | Cannot rule out spurious grouping without deliberate dissimilar batches |
-| Only one batch, one session | One session is not enough to claim the workflow is reliable |
-| Periodic boundary not implemented | Blocks one of the six current hypotheses from being testable |
-| No `pyproject.toml` / pinned versions | Reproducibility package incomplete |
-| Hypothesis status updates pending | JSON artifacts need `confirmed`/`refuted`/`inconclusive` added |
+| Baseline comparison not run | No evidence that governed > unstructured prompting yet — this is the central claim of the methods paper |
+| Negative controls not run | Cannot rule out spurious grouping without a deliberate batch of dissimilar rules |
+| Only one batch tested | One session of 10 rules is not enough to claim the workflow is reliable across the 256-rule space |
+| Periodic boundary not implemented | Blocks ChatGPT h005 from being testable |
+| Random-seed sweeps not yet run | ChatGPT h001/h002/h004/h006 still `proposed` — single-seed results not yet generalized |
+| Second LLM session not conducted | No evidence the workflow reproduces across sessions or rule batches |
 
-The project follows an explicit publication ladder (internal notes → GitHub Release → Zenodo DOI → preprint). We are at stage 1. The near-term goal is to complete at least one full execution cycle — run the follow-up experiments, update hypothesis statuses, and write Research Note 003.
+The project follows an explicit publication ladder (internal notes → GitHub Release → Zenodo DOI → preprint). We are at stage 1, with the first complete experiment cycle now done. See [Research Note 002](docs/research-notes/002-publication-positioning.md) for the full ladder and gate conditions.
 
 ---
 
@@ -141,9 +152,8 @@ All 119 tests should pass in under 2 seconds.
 ## Project Structure
 
 ```
-cellauto-lab/
+paper-eca-llm-hypothesis-workflow/
 ├── README.md
-├── PUBLICATION_CHECKLIST.md        Pre-publication sign-off checklist
 │
 ├── src/cellauto_lab/               Core Python library
 │   ├── rules.py                    Wolfram rule encoding (0–255)
@@ -164,7 +174,8 @@ cellauto-lab/
 │   ├── hypothesis-quality-checklist.md
 │   └── research-notes/
 │       ├── 001-first-hypothesis-review-comparison.md
-│       └── 002-publication-positioning.md
+│       ├── 002-publication-positioning.md
+│       └── 003-follow-up-experiments-results.md
 │
 ├── prompts/
 │   └── hypothesis-review.md        LLM submission prompt template (v2.0)
@@ -174,7 +185,7 @@ cellauto-lab/
 │
 ├── hypotheses/                     LLM response artifacts (versioned, labeled)
 │   ├── review_20260618_001.json    Claude Opus 4.8 Max — session 1
-│   ├── review_20260618_eca01.json  ChatGPT o3 — session 1
+│   ├── review_20260618_eca01.json  ChatGPT 5.5 high thinking — session 1
 │   └── review_20260618_comparison.md
 │
 └── examples/

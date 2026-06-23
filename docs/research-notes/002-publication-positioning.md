@@ -1,6 +1,6 @@
 # Research Note 002: Publication Positioning
 
-**Repository:** `cellauto-lab`
+**Repository:** `paper-eca-llm-hypothesis-workflow`
 **Date:** 2026-06-18
 **Author:** Leonardo Sigales / SYNTRAN Labs
 **Status:** `draft — planning`
@@ -31,7 +31,7 @@ Both models recovered a metric pattern consistent with known ECA structure, work
 The workflow requires a human operator at every stage: to run the notebook, to submit the prompt, to review the schema, to apply the quality checklist, to decide which hypotheses to execute, and to interpret the results. The LLM is a structured collaborator, not an autonomous agent.
 
 **Not a general benchmark of model intelligence.**
-ChatGPT o3 and Claude Opus 4.8 were compared on a single batch in one session. No statistically meaningful conclusions about relative capability can be drawn from this.
+ChatGPT 5.5 (high thinking) and Claude Opus 4.8 were compared on a single batch in one session. No statistically meaningful conclusions about relative capability can be drawn from this.
 
 **Not a production AI system.**
 `cellauto-lab` is an incubation research workspace. It is not a deployed tool, a library for others to use, or a system with reliability guarantees.

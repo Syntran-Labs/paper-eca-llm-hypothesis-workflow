@@ -48,7 +48,7 @@
       "metrics_to_compare": ["compression_ratio", "density_mean", "activity_score", "periodicity_score"],
       "confidence": "medium",
       "risk_of_overclaiming": "Longer runs can introduce transient-to-late-time transitions that reverse the ranking seen at 200 steps. Fixed_zero boundaries may alter late-time behavior, and the compression_ratio measure is only a proxy for complexity. A single initial condition may overstate regularity.",
-      "status": "proposed"
+      "status": "supported"
     },
     {
       "hypothesis_id": "h004",

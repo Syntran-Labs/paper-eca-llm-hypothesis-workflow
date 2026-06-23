@@ -40,6 +40,11 @@ figures/
 # SYNTRAN AIEOS / Claude Code
 .claude/
 
+# Internal SYNTRAN operational artifacts — not public research content
+PUBLICATION_CHECKLIST.md
+cellular-automata.md
+scientific-research.md
+
 # OS noise
 .DS_Store
 Thumbs.db

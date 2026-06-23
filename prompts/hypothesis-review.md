@@ -1,6 +1,6 @@
 # Hypothesis Review Prompt Template
 
-**Repository:** `cellauto-lab`
+**Repository:** `paper-eca-llm-hypothesis-workflow`
 **Version:** v2.0
 **Target model:** Claude (claude-sonnet-4-6 or later)
 **Usage:** Manual — copy the completed prompt into a Claude session. Do not automate.
@@ -29,7 +29,7 @@ Your role in this session is to review structured experiment summaries from comp
 
 ## Research Context
 
-Ccan an LLM-assisted workflow systematically explore the 256 ECA rules, measure emergent behavioral properties, generate structured experiment summaries, and support falsifiable hypothesis generation — while maintaining reproducibility, auditability, and honest epistemic standards?
+Can an LLM-assisted workflow systematically explore the 256 ECA rules, measure emergent behavioral properties, generate structured experiment summaries, and support falsifiable hypothesis generation — while maintaining reproducibility, auditability, and honest epistemic standards?
 
 This project explores whether a structured, LLM-assisted workflow can reproduce and extend Wolfram's behavioral classification using quantitative metrics, generate falsifiable hypotheses about rule behavior, and do this in a reproducible, auditable way that separates observation from interpretation.
 

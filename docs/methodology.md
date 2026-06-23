@@ -1,7 +1,7 @@
 # Methodology
 
-**Repository:** `cellauto-lab`
-**Status:** Incubation — private research workspace
+**Repository:** `paper-eca-llm-hypothesis-workflow`
+**Status:** Active
 
 ---
 
@@ -58,7 +58,7 @@ All metrics are computed with `zlib` compression and `numpy` vectorized operatio
 
 ---
 
-## Experiment Loop (v1)
+## Experiment Loop
 
 ```text
 1. Configure parameters
@@ -67,11 +67,14 @@ All metrics are computed with `zlib` compression and `numpy` vectorized operatio
 4. Build results dataframe
 5. Rank rules by heuristic interest score
 6. Generate structured summaries for top rules
-7. [PLACEHOLDER] Submit summaries to LLM for hypothesis generation
-8. [PLACEHOLDER] Human operator selects next experiments
+7. Submit summaries to LLM via prompts/hypothesis-review.md (manual)
+8. Validate LLM response against schemas/hypothesis_response.schema.json
+9. Human operator reviews hypotheses with docs/hypothesis-quality-checklist.md
+10. Execute accepted hypotheses as follow-up simulations
+11. Record results and update hypothesis statuses
 ```
 
-Steps 7 and 8 are not implemented in v1. The structured summaries in step 6 are designed to be passed directly to an LLM in a future iteration.
+Steps 7–11 are documented in [docs/ai-hypothesis-loop.md](ai-hypothesis-loop.md). The first full cycle through all steps was completed on 2026-06-23.
 
 ---
 
@@ -105,7 +108,7 @@ Following the `scientific-research` domain pack:
 2. Every behavioral label (e.g., "chaotic", "complex") is marked as **tentative**
 3. The interest score used for ranking is a **heuristic proxy**, not a ground truth
 4. Single-run results are not treated as conclusive
-5. Metric limitations are documented in `domains/cellular-automata/profile.md`
+5. Metric limitations are documented in the [Metrics](#metrics) section above and in [docs/methodology.md](methodology.md)
 
 ---
 

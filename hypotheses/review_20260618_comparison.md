@@ -11,7 +11,7 @@
 | | Model A | Model B |
 |---|---|---|
 | **File** | `review_20260618_eca01.json` | `review_20260618_001.json` |
-| **Model** | ChatGPT o3 (high thinking) | Claude Opus 4.8 Max |
+| **Model** | ChatGPT 5.5 (high thinking) | Claude Opus 4.8 Max |
 | **Hypotheses** | 6 | 3 |
 | **Schema valid on delivery** | Yes | No — missing `status` field (corrected before saving) |
 

@@ -1,6 +1,6 @@
 # Research Notes
 
-**Repository:** `cellauto-lab`
+**Repository:** `paper-eca-llm-hypothesis-workflow`
 **Maintained by:** SYNTRAN Labs
 **Workflow:** SYNTRAN AIEOS
 
@@ -84,5 +84,6 @@ Until all four conditions are met, findings must be framed as hypotheses, prelim
 
 | # | Title | Status | Description |
 |---|---|---|---|
-| [001](001-first-hypothesis-review-comparison.md) | First LLM Hypothesis Review Comparison | `draft — experiment-pending` | Compares ChatGPT o3 and Claude Opus 4.8 responses to the first ECA hypothesis review prompt; documents shared findings, structural differences, and next experiments |
+| [001](001-first-hypothesis-review-comparison.md) | First LLM Hypothesis Review Comparison | `draft — experiment-tested` | Compares ChatGPT 5.5 (high thinking) and Claude Opus 4.8 responses to the first ECA hypothesis review prompt; documents shared findings, structural differences, and next experiments |
 | [002](002-publication-positioning.md) | Publication Positioning | `draft — planning` | Documents the publication strategy decision: methodology paper, not an ECA findings paper |
+| [003](003-follow-up-experiments-results.md) | Follow-Up Experiment Results | `complete` | Records outcomes of three experiment sets: Claude h001/h002 (supported), Claude h003 (partially supported), ChatGPT h003 (supported); first full execution cycle done |

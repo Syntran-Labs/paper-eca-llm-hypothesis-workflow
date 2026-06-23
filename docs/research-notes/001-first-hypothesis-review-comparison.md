@@ -1,9 +1,9 @@
 # Research Note 001: First LLM Hypothesis Review Comparison
 
-**Repository:** `cellauto-lab`
+**Repository:** `paper-eca-llm-hypothesis-workflow`
 **Date:** 2026-06-18
 **Author:** Leonardo Sigales / SYNTRAN Labs
-**Status:** `draft — experiment-pending`
+**Status:** `draft — experiment-tested` — see [Research Note 003](003-follow-up-experiments-results.md) for outcomes
 
 ---
 
@@ -11,7 +11,7 @@
 
 On 2026-06-18, the same structured experiment summary batch — the top 10 rules by heuristic interest score from the full 256-rule ECA sweep — was submitted to two LLMs using the prompt template in [`prompts/hypothesis-review.md`](../../prompts/hypothesis-review.md). The two models were:
 
-- **ChatGPT o3** (high thinking mode) — response file: [`hypotheses/review_20260618_eca01.json`](../../hypotheses/review_20260618_eca01.json)
+- **ChatGPT 5.5 (high thinking)** (high thinking mode) — response file: [`hypotheses/review_20260618_eca01.json`](../../hypotheses/review_20260618_eca01.json)
 - **Claude Opus 4.8 Max** — response file: [`hypotheses/review_20260618_001.json`](../../hypotheses/review_20260618_001.json)
 
 Both models, independently and without knowledge of the other's response, identified the same dominant structure in the batch: the ten rules cluster into five near-identical pairs.
@@ -73,7 +73,7 @@ All ten rules showed `periodicity_score = 0.0` under the baseline conditions. Bo
 
 ## How The Models Differed
 
-### ChatGPT o3: empirical persistence testing
+### ChatGPT 5.5 high thinking: empirical persistence testing
 
 ChatGPT produced 6 hypotheses, each asking whether an observed pattern survives a parameter change:
 
@@ -180,7 +180,7 @@ This note explicitly does not claim:
 - That `compression_ratio` or `entropy_score` measure true algorithmic complexity.
 - That the workflow is validated. This is the first session; one batch is not a validation.
 - That these results are publication-ready as cellular automata research.
-- That Claude Opus is a better research assistant than ChatGPT o3, or vice versa. The outputs are complementary.
+- That Claude Opus is a better research assistant than ChatGPT 5.5 (high thinking), or vice versa. The outputs are complementary.
 
 ---
 

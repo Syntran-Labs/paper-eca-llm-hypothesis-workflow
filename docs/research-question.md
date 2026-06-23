@@ -1,7 +1,7 @@
 # Research Question
 
-**Repository:** `cellauto-lab`
-**Status:** Incubation — private research workspace
+**Repository:** `paper-eca-llm-hypothesis-workflow`
+**Status:** Active
 **Date:** 2026-06-17
 
 ---
@@ -50,13 +50,15 @@ The broader question is methodological: can LLM-assisted scientific exploration 
 
 ## Success Criteria for v1
 
-- [ ] All 256 rules are simulated under identical conditions
-- [ ] A minimum of 7 behavioral metrics are computed for each rule
-- [ ] Metrics are reproducible given the same parameters and seed
-- [ ] Structured summaries separate observation from interpretation
-- [ ] Known reference rules (0, 30, 90, 110, 184, 255) produce expected visual patterns
-- [ ] The notebook runs fully offline without external credentials
-- [ ] No LLM calls are embedded in the notebook
+All v1 criteria met as of 2026-06-18.
+
+- [x] All 256 rules are simulated under identical conditions
+- [x] A minimum of 7 behavioral metrics are computed for each rule
+- [x] Metrics are reproducible given the same parameters and seed
+- [x] Structured summaries separate observation from interpretation
+- [x] Known reference rules (0, 30, 90, 110, 184, 255) produce expected visual patterns
+- [x] The notebook runs fully offline without external credentials
+- [x] No LLM calls are embedded in the notebook
 
 ---
 

@@ -1,7 +1,7 @@
 # Manual AI Hypothesis Loop
 
-**Repository:** `cellauto-lab`
-**Status:** Design — v2 planning
+**Repository:** `paper-eca-llm-hypothesis-workflow`
+**Status:** Active — v2 in use
 **Date:** 2026-06-18
 
 ---

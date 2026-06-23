@@ -24,7 +24,7 @@
       "metrics_to_compare": ["density_mean", "density_final", "transition_count", "entropy_score", "periodicity_score", "activity_score", "compression_ratio"],
       "confidence": "medium",
       "risk_of_overclaiming": "The exact-equality prediction is untested and assumes (a) single_seed places one '1' on the true grid center for odd n_cells, and (b) activity_score is computed in a reflection-invariant way (density_mean, density_final, transition_count, and entropy_score are reflection-invariant by construction; activity_score's definition is not verified in this session). If simulate() seeds a fixed index rather than the geometric center, an odd grid will not fully symmetrize and equality may not be reached. Per the Known Limitations, fixed_zero may introduce edge artifacts that could prevent exact equality even with a centered seed. Mirror equivalence is a property of the rule encoding; a single simulation tests its behavioral consequence but cannot establish it on its own.",
-      "status": "proposed"
+      "status": "supported"
     },
     {
       "hypothesis_id": "h002",
@@ -36,7 +36,7 @@
       "metrics_to_compare": ["density_final", "entropy_score", "compression_ratio", "transition_count", "density_mean"],
       "confidence": "low",
       "risk_of_overclaiming": "Speculative: a single run cannot separate centering artifact, transient, and genuine asymmetric dynamics. Per the Known Limitations, density_final is a single noisy snapshot and compression_ratio is a proxy that does not measure Kolmogorov complexity, so part of the observed gap may be measurement noise rather than dynamics. The test also depends on simulate() centering the seed on odd grids; if it does not, a null result is uninformative.",
-      "status": "proposed"
+      "status": "supported"
     },
     {
       "hypothesis_id": "h003",
@@ -48,7 +48,7 @@
       "metrics_to_compare": ["density_final", "density_mean"],
       "confidence": "low",
       "risk_of_overclaiming": "This leans on the 000->1 / 111->0 property read from the rule encoding, which the current metric set only reflects indirectly. With fixed_zero boundaries and an already-mixed pattern at step 200, large regions are not uniform, so the predicted clean period-2 swing may be heavily damped; a small swing would be ambiguous (consistent with boundaries/seed structure masking the oscillation rather than cleanly ruling it out). Per the Known Limitations, density_final depends on grid size, step count, and initial condition and is a single snapshot, making this test weaker than h001's.",
-      "status": "proposed"
+      "status": "partially_supported"
     }
   ],
   "review_notes": "The dominant structure in this batch is that the ten rules form five adjacent mirror pairs, so the within-pair similarity is expected under reflection equivalence rather than anomalous; the genuinely interesting outlier is the 107/121 pair, whose divergence is far larger than the other four pairs. The mirror relationship between rule numbers is stated as a derivable, checkable property of the lookup tables, not as an external citation; the simulations proposed test its behavioral consequences. No claim here should be read as establishing causality or validating a theorem from these single runs."

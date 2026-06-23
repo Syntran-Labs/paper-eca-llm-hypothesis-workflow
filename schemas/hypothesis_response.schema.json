@@ -136,9 +136,12 @@
             "proposed",
             "accepted_for_testing",
             "rejected",
-            "inconclusive"
+            "inconclusive",
+            "supported",
+            "partially_supported",
+            "refuted"
           ],
-          "description": "Review status. LLM responses must always return 'proposed'. Human reviewers update to 'accepted_for_testing', 'rejected', or 'inconclusive' after applying the hypothesis quality checklist."
+          "description": "Review or experiment status. LLM responses must always return 'proposed'. Human reviewers update to 'accepted_for_testing', 'rejected', or 'inconclusive' after quality checklist review. After follow-up simulations are run, status updates to 'supported', 'partially_supported', or 'refuted' based on whether the predicted metric change was observed."
         },
         "rejection_reason": {
           "type": "string",

@@ -1,6 +1,6 @@
 # References
 
-**Repository:** `cellauto-lab`
+**Repository:** `paper-eca-llm-hypothesis-workflow`
 
 All references used or consulted for this project. Source quality labels follow the `scientific-research` domain pack conventions.
 
