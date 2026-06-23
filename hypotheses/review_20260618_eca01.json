@@ -1,0 +1,90 @@
+{
+  "review_id": "review_20260618_eca01",
+  "source_summary_ids": [
+    "rule_059_single_seed",
+    "rule_115_single_seed",
+    "rule_025_single_seed",
+    "rule_067_single_seed",
+    "rule_097_single_seed",
+    "rule_041_single_seed",
+    "rule_083_single_seed",
+    "rule_027_single_seed",
+    "rule_107_single_seed",
+    "rule_121_single_seed"
+  ],
+  "candidate_rules": [59, 115, 25, 67, 97, 41, 83, 27, 107, 121],
+  "hypotheses": [
+    {
+      "hypothesis_id": "h001",
+      "rule_ids": [59, 115],
+      "observation_basis": "Rules 59 and 115 are nearly indistinguishable in the available run: density_mean = 0.585075 vs 0.585124, density_final = 0.65 vs 0.65, transition_count = 35.3333 vs 35.3333, activity_score = 0.8273 vs 0.8272, entropy_score = 3.243453 vs 3.243453, periodicity_score = 0.0 vs 0.0, compression_ratio = 0.02194 vs 0.021891.",
+      "hypothesis": "For rules 59 and 115, changing the initial condition from single_seed to random while keeping n_cells = 100, n_steps = 200, and boundary_condition = fixed_zero will leave density_mean, activity_score, entropy_score, and compression_ratio statistically indistinguishable across seeds; specifically, the mean absolute difference between the two rules will remain smaller than 0.01 for density_mean and activity_score and smaller than 0.005 for compression_ratio.",
+      "expected_result": "Across a multi-seed random-initial-condition sweep, rules 59 and 115 should continue to match closely on density_mean, activity_score, entropy_score, and compression_ratio, with no systematic divergence and periodicity_score remaining near 0 for both rules.",
+      "test_plan": "Run cellauto_lab.simulate() for rule_number = 59 and rule_number = 115 with n_cells = 100, n_steps = 200, initial_condition = 'random', boundary_condition = 'fixed_zero', using at least 20 random_seed values. Compare per-seed and mean values for density_mean, activity_score, entropy_score, compression_ratio, and periodicity_score.",
+      "metrics_to_compare": ["density_mean", "activity_score", "entropy_score", "compression_ratio", "periodicity_score"],
+      "confidence": "medium",
+      "risk_of_overclaiming": "The current evidence is a single-seed run under fixed_zero boundaries, so the similarity could be contingent on that specific setup. Finite-size effects and edge artifacts may mask differences. Compression_ratio is only a proxy, and single-seed behavior may not represent typical behavior.",
+      "status": "proposed"
+    },
+    {
+      "hypothesis_id": "h002",
+      "rule_ids": [83, 27, 59, 115],
+      "observation_basis": "Rules 83 and 27 have high activity_score with lower entropy_score and lower compression_ratio than rules 59 and 115: for 83 and 27, activity_score = 0.8251 and 0.8252, entropy_score = 2.907294 and 2.907294, compression_ratio = 0.017562 and 0.017363; for 59 and 115, activity_score = 0.8273 and 0.8272, entropy_score = 3.243453 and 3.243453, compression_ratio = 0.02194 and 0.021891.",
+      "hypothesis": "Under the same simulation parameters but with random initial conditions, rules 83 and 27 will retain activity_score values comparable to rules 59 and 115 while keeping lower entropy_score and lower compression_ratio. In direction terms: activity_score for 83 and 27 will remain within 0.03 of 59 and 115, but entropy_score and compression_ratio for 83 and 27 will remain lower on average.",
+      "expected_result": "In a random-seed sweep, the mean activity_score of rules 83 and 27 should stay close to that of rules 59 and 115, while the mean entropy_score of 83 and 27 stays below 3.0 and below the mean entropy_score of 59 and 115, and the mean compression_ratio of 83 and 27 remains lower than that of 59 and 115.",
+      "test_plan": "Run cellauto_lab.simulate() for rule_number in [83, 27, 59, 115] with n_cells = 100, n_steps = 200, initial_condition = 'random', boundary_condition = 'fixed_zero', over at least 20 random_seed values. Compare group means for activity_score, entropy_score, and compression_ratio.",
+      "metrics_to_compare": ["activity_score", "entropy_score", "compression_ratio"],
+      "confidence": "medium",
+      "risk_of_overclaiming": "This comparison relies on row-level entropy, which may miss block structure. The apparent difference could also depend on the single_seed initialization or on fixed_zero boundary effects. Similar activity_score does not imply similar spatial organization.",
+      "status": "proposed"
+    },
+    {
+      "hypothesis_id": "h003",
+      "rule_ids": [97, 41, 25, 67],
+      "observation_basis": "Rules 97 and 41 have lower density_mean and activity_score but higher compression_ratio than rules 25 and 67 in the available run: 97 and 41 have density_mean = 0.400697 and 0.400796, activity_score = 0.70515 and 0.70525, compression_ratio = 0.045423 and 0.04403; 25 and 67 have density_mean = 0.458905 and 0.458955, activity_score = 0.75975 and 0.7595, compression_ratio = 0.027512 and 0.026716.",
+      "hypothesis": "If n_steps is increased from 200 to 400 with the same single_seed and fixed_zero boundary, rules 97 and 41 will continue to show higher compression_ratio than rules 25 and 67, while also maintaining lower density_mean and lower activity_score. The direction expected is stable rank ordering across these four rules for all three named metrics.",
+      "expected_result": "At n_steps = 400, rules 97 and 41 should still have compression_ratio greater than rules 25 and 67, and density_mean and activity_score less than rules 25 and 67. Periodicity_score is expected to remain low or near 0, but that is secondary.",
+      "test_plan": "Run cellauto_lab.simulate() for rule_number in [97, 41, 25, 67] with n_cells = 100, n_steps = 400, initial_condition = 'single_seed', random_seed = 42, boundary_condition = 'fixed_zero'. Compare the ordering of compression_ratio, density_mean, and activity_score with the baseline ordering.",
+      "metrics_to_compare": ["compression_ratio", "density_mean", "activity_score", "periodicity_score"],
+      "confidence": "medium",
+      "risk_of_overclaiming": "Longer runs can introduce transient-to-late-time transitions that reverse the ranking seen at 200 steps. Fixed_zero boundaries may alter late-time behavior, and the compression_ratio measure is only a proxy for complexity. A single initial condition may overstate regularity.",
+      "status": "proposed"
+    },
+    {
+      "hypothesis_id": "h004",
+      "rule_ids": [107, 121],
+      "observation_basis": "Rules 107 and 121 are similar in activity_score but differ noticeably in density_final and compression_ratio: rule 107 has activity_score = 0.69285, density_final = 0.4, compression_ratio = 0.027164; rule 121 has activity_score = 0.69205, density_final = 0.52, compression_ratio = 0.040498.",
+      "hypothesis": "With random initial conditions under the same grid size, step count, and fixed_zero boundary, rule 121 will continue to produce higher density_final and higher compression_ratio than rule 107, while activity_score remains similar between the two rules. The expected direction is density_final_121 > density_final_107 and compression_ratio_121 > compression_ratio_107, with |activity_score_121 - activity_score_107| remaining small.",
+      "expected_result": "Across a multi-seed random-initial-condition sweep, the mean density_final and mean compression_ratio of rule 121 should exceed those of rule 107, while the mean activity_score difference remains below about 0.03.",
+      "test_plan": "Run cellauto_lab.simulate() for rule_number = 107 and rule_number = 121 with n_cells = 100, n_steps = 200, initial_condition = 'random', boundary_condition = 'fixed_zero', over at least 20 random_seed values. Compare density_final, compression_ratio, and activity_score distributions.",
+      "metrics_to_compare": ["density_final", "compression_ratio", "activity_score", "density_mean"],
+      "confidence": "medium",
+      "risk_of_overclaiming": "The current pattern comes from one single_seed run and may not survive other initial conditions. Because compression_ratio is a proxy and density measures can be sensitive to transients, the observed difference may reflect setup-specific behavior rather than a robust rule distinction.",
+      "status": "proposed"
+    },
+    {
+      "hypothesis_id": "h005",
+      "rule_ids": [83, 27],
+      "observation_basis": "Rules 83 and 27 are nearly identical in the available run: density_mean = 0.500796 for both, density_final = 0.33 for both, transition_count = 34.3184 vs 34.2985, activity_score = 0.8251 vs 0.8252, entropy_score = 2.907294 vs 2.907294, periodicity_score = 0.0 vs 0.0, compression_ratio = 0.017562 vs 0.017363.",
+      "hypothesis": "Switching the boundary condition from fixed_zero to periodic while keeping the single_seed initial condition will preserve the near-equality of rules 83 and 27 across density_mean, activity_score, entropy_score, and compression_ratio. The expected direction is stability of the pairwise difference near zero rather than divergence.",
+      "expected_result": "Under periodic boundaries, rules 83 and 27 should still have very small absolute differences in density_mean, activity_score, entropy_score, and compression_ratio, with neither rule showing a consistent advantage across those metrics.",
+      "test_plan": "Run cellauto_lab.simulate() for rule_number = 83 and rule_number = 27 with n_cells = 100, n_steps = 200, initial_condition = 'single_seed', random_seed = 42, boundary_condition = 'periodic'. Compare the resulting metrics pairwise and against the fixed_zero baseline.",
+      "metrics_to_compare": ["density_mean", "activity_score", "entropy_score", "compression_ratio", "periodicity_score"],
+      "confidence": "low",
+      "risk_of_overclaiming": "Boundary changes can strongly affect finite cellular automata, especially when the current setup uses fixed_zero edges that may suppress or reshape patterns. The current similarity might be partly induced by the existing boundary condition, so a divergence under periodic boundaries would not be surprising.",
+      "status": "inconclusive"
+    },
+    {
+      "hypothesis_id": "h006",
+      "rule_ids": [59, 115, 83, 27, 97, 41],
+      "observation_basis": "All six of these rules have periodicity_score = 0.0 in the available runs, despite differing density_mean, activity_score, entropy_score, and compression_ratio values.",
+      "hypothesis": "If n_cells is increased from 100 to 200 and n_steps from 200 to 400 under the same single_seed and fixed_zero settings, periodicity_score for rules 59, 115, 83, 27, 97, and 41 will remain low rather than rising sharply; specifically, none of these rules will show periodicity_score approaching 1.0 under that larger simulation window.",
+      "expected_result": "In the larger-grid, longer-run follow-up, periodicity_score for each listed rule should remain far below 1.0 and should not exhibit a consistent jump that would indicate an easily detected short cycle in the existing metric.",
+      "test_plan": "Run cellauto_lab.simulate() for rule_number in [59, 115, 83, 27, 97, 41] with n_cells = 200, n_steps = 400, initial_condition = 'single_seed', random_seed = 42, boundary_condition = 'fixed_zero'. Compare periodicity_score to the baseline values of 0.0.",
+      "metrics_to_compare": ["periodicity_score", "compression_ratio", "activity_score"],
+      "confidence": "low",
+      "risk_of_overclaiming": "A periodicity_score of 0.0 in one run does not rule out longer-period behavior, transient behavior, or cycles only visible under other boundaries or initial conditions. The periodicity metric itself may also miss or misclassify cycles, including boundary-induced ones.",
+      "status": "proposed"
+    }
+  ]
+}

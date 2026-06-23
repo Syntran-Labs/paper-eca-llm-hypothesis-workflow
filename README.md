@@ -1,97 +1,140 @@
 # cellauto-lab
 
-**Status:** Incubation — private research workspace  
-**Project:** SYNTRAN Labs  
-**Workflow:** SYNTRAN AIEOS
+**Status:** Open — Early Incubation  
+**Organization:** [SYNTRAN Labs](https://syntran.io)  
+**Workflow:** SYNTRAN AIEOS  
+**Branch:** `main` is the current stable snapshot — see [Research Notes](docs/research-notes/) for the full trail
 
 ---
 
-## What Is This?
+## What This Is
 
-`cellauto-lab` is a Python/Jupyter research workspace for exploring one-dimensional elementary cellular automata (ECA) — 256 simple rules studied by Stephen Wolfram and others, capable of producing surprisingly complex emergent behavior.
+`cellauto-lab` is a governed research workspace that investigates one concrete question:
 
-The project is a testbed for a specific methodological question: can an LLM-assisted computational workflow explore a well-understood discrete system in a way that is reproducible, auditable, and epistemically honest?
+> **Can an LLM-assisted scientific workflow generate falsifiable, non-overclaiming hypotheses — reproducibly?**
 
-This is not production software. It is exploratory research infrastructure at an early incubation stage.
+We use [elementary cellular automata (ECA)](https://en.wikipedia.org/wiki/Elementary_cellular_automaton) as the testbed: 256 Wolfram rules whose behavioral classes are already well-documented. Because the ground truth is known, we can immediately detect when an LLM overclaims, hallucinates structure, or fails to be falsifiable.
 
----
-
-## Research Question
-
-> Can an LLM-assisted workflow systematically explore the 256 elementary cellular automaton rules, measure emergent behavioral properties, generate structured experiment summaries, and support falsifiable hypothesis generation — while maintaining reproducibility, auditability, and honest epistemic standards?
-
-See [docs/research-question.md](docs/research-question.md) for full scope and success criteria.
+This is **not** a paper about new ECA results. It is an open investigation into whether structured, governed LLM workflows produce meaningfully better scientific reasoning than unstructured prompting on the same task. The target publication is a methods paper.
 
 ---
 
 ## Why Cellular Automata?
 
-Elementary cellular automata are ideal for this kind of methodological study because:
+ECA is ideal for evaluating AI-assisted hypothesis generation because:
 
-1. **The ground truth is known.** Wolfram's four behavioral classes are well-established, giving a reference point for evaluating LLM-assisted classification.
-2. **The rule space is finite and small.** All 256 rules can be exhaustively simulated in seconds.
-3. **Behavior is visually striking.** Space-time diagrams make patterns immediately interpretable, which helps detect when an LLM overclaims or confabulates.
-4. **The domain has known hard problems.** Rule 110's universality is a formal result, not a visual impression — a good test of whether the workflow maintains epistemic discipline.
+1. **Ground truth exists.** Wolfram's behavioral classes and known symmetry structures give a reference point to catch confabulation.
+2. **The rule space is finite.** All 256 rules can be exhaustively simulated in seconds — no sampling, no approximation.
+3. **Overclaiming is detectable.** Claiming Rule 110 "proves" universality from a 200-step simulation is immediately falsifiable.
+4. **Results are reproducible.** Fixed seeds, pure functions, NumPy vectorization — anyone can re-run and get the same numbers.
 
 ---
 
 ## Why SYNTRAN AIEOS?
 
-This project follows [SYNTRAN AIEOS](https://syntran.io) workflow conventions because:
+SYNTRAN AIEOS is the governance layer that makes the methodology rigorous:
 
-- Observations and interpretations are stored separately, preventing silent conflation
-- All LLM-generated content is marked as such and stored as artifacts, not conclusions
-- Human operator authority is explicit: the LLM proposes, the human decides
-- Every experiment is governed by pre-declared parameters, seeds, and metadata
-- Reproducibility is treated as part of the result, not an afterthought
+- **Observations and interpretations are stored separately** — the LLM never sees mixed signals
+- **All LLM output is an artifact, not a conclusion** — stored under `hypotheses/`, labeled, versioned
+- **Every hypothesis must pass a quality checklist** before being promoted to `accepted_for_testing`
+- **Human authority is explicit** — the LLM proposes, the operator decides, the record is immutable
+- **A structured JSON schema** validates every LLM response at submission time
+- **A formal prompt template (v2.0)** enforces epistemic constraints before the model sees the data
 
-See [docs/methodology.md](docs/methodology.md) for the full methodology.
+Without this layer, you get interesting outputs. With it, you get auditable science.
 
 ---
 
-## How To Run the Notebook
+## What Is Done
+
+### Simulation engine — complete
+- All 256 Wolfram ECA rules simulated via vectorized NumPy
+- Two initial conditions: `single_seed`, `random` (seeded, reproducible)
+- Fixed-zero boundary condition
+- Full space-time grids, configurable size
+
+### Behavioral metrics — complete (7 metrics per rule)
+| Metric | What it measures |
+|---|---|
+| `density_mean` | Average live-cell density across all steps |
+| `density_final` | Live-cell density at last step |
+| `transition_count` | Spatial fragmentation (cell-state changes per row) |
+| `activity_score` | Temporal change rate |
+| `entropy_score` | Row-level density distribution shape |
+| `periodicity_score` | Cycle detection post-transient |
+| `compression_ratio` | Compressibility via zlib (proxy for regularity) |
+
+Each metric has a documented definition, expected range, and known limitations. See [docs/methodology.md](docs/methodology.md).
+
+### Test suite — 119 tests, all passing
+- Rule encoding correctness (spot checks for Rules 0, 30, 90, 110, 255)
+- Simulator output shape, dtype, binary-value guarantees
+- Determinism of seeded random initial conditions
+- Metric key completeness and value ranges
+- Known behavioral corner cases
+
+### Governance layer — complete
+- [Prompt template v2.0](prompts/hypothesis-review.md) — structures the LLM submission with explicit epistemic constraints, known limitations, and output format requirements
+- [JSON schema](schemas/hypothesis_response.schema.json) — validates every LLM response at intake (falsifiability fields, metric name enum, confidence level, test plan)
+- [Hypothesis quality checklist](docs/hypothesis-quality-checklist.md) — hard blocking criteria (no unverified citations, no causal claims from a single run, must name specific metric and rule, must state direction)
+
+### First LLM review session — complete
+On 2026-06-18, the top 10 rules by behavioral interest were submitted independently to two models:
+
+- **Claude Opus 4.8 Max** — 3 hypotheses, schema-conformant
+- **ChatGPT o3** — 6 hypotheses, schema-conformant (one schema violation caught and corrected at intake)
+
+**Key result:** Both models independently identified the same structural pattern — 5 near-identical pairs among the 10 rules (59/115, 25/67, 97/41, 83/27, 107/121), with matching metrics to 3–5 decimal places. This corresponds to known ECA reflection-equivalence classes. Neither model cited literature. Both produced falsifiable hypotheses with specific rules, metrics, and predicted directions.
+
+This is a **methodology validation**, not a discovery. The result was expected from known ECA theory. The finding is that the governance layer worked: both models stayed within the epistemic constraints.
+
+Full analysis in [Research Note 001](docs/research-notes/001-first-hypothesis-review-comparison.md). Publication positioning in [Research Note 002](docs/research-notes/002-publication-positioning.md).
+
+---
+
+## What Is Not Done
+
+These are the gaps between current state and any external publication:
+
+| Gap | Why it matters |
+|---|---|
+| Follow-up experiments not executed | All hypotheses are still `proposed` — none confirmed or refuted |
+| Baseline comparison not run | No evidence that governed > unstructured prompting yet |
+| Negative controls not designed | Cannot rule out spurious grouping without deliberate dissimilar batches |
+| Only one batch, one session | One session is not enough to claim the workflow is reliable |
+| Periodic boundary not implemented | Blocks one of the six current hypotheses from being testable |
+| No `pyproject.toml` / pinned versions | Reproducibility package incomplete |
+| Hypothesis status updates pending | JSON artifacts need `confirmed`/`refuted`/`inconclusive` added |
+
+The project follows an explicit publication ladder (internal notes → GitHub Release → Zenodo DOI → preprint). We are at stage 1. The near-term goal is to complete at least one full execution cycle — run the follow-up experiments, update hypothesis statuses, and write Research Note 003.
+
+---
+
+## How to Run
 
 ### Prerequisites
 
 ```bash
-pip install numpy pandas matplotlib jupyter
+pip install numpy jupyter pytest
 ```
 
-Python 3.11+ is required. No other dependencies.
+Python 3.11+ required. No other dependencies. No API keys. No external credentials.
 
-### Run
+### Notebook
 
 ```bash
-# From the project root
 jupyter notebook notebooks/001_ca_rule_space_exploration.ipynb
 ```
 
-Or with JupyterLab:
+Use **Kernel → Restart & Run All** for a clean run. The notebook runs fully offline.
+
+### Tests
 
 ```bash
-jupyter lab notebooks/001_ca_rule_space_exploration.ipynb
-```
-
-The notebook runs fully offline. No internet connection or external credentials are required.
-
-After opening, use **Kernel → Restart & Run All** to ensure a clean run from scratch.
-
----
-
-## How To Run Tests
-
-```bash
-# From the project root
-pip install pytest
 pytest tests/
 ```
 
-Tests cover:
-- Rule encoding correctness (including known-value spot checks for Rules 30, 90, 110)
-- Simulator output shape, dtype, and binary-value guarantees
-- Determinism of seeded random initial conditions
-- Metric key completeness and value ranges
-- Known behavioral corner cases (Rule 0 extinction, Rule 255 saturation)
+All 119 tests should pass in under 2 seconds.
 
 ---
 
@@ -100,79 +143,74 @@ Tests cover:
 ```
 cellauto-lab/
 ├── README.md
-├── .gitignore
-├── PUBLICATION_CHECKLIST.md
+├── PUBLICATION_CHECKLIST.md        Pre-publication sign-off checklist
 │
-├── domains/                         # Project-local domain packs (SYNTRAN AIEOS)
-│   ├── cellular-automata/
-│   │   └── profile.md
-│   └── scientific-research/
-│       └── profile.md
-│
-├── src/
-│   └── cellauto_lab/               # Core Python library
-│       ├── __init__.py
-│       ├── rules.py                # Wolfram rule encoding
-│       ├── simulator.py            # ECA simulator (vectorized)
-│       ├── metrics.py              # Behavioral metrics
-│       └── reporting.py           # Structured experiment summaries
+├── src/cellauto_lab/               Core Python library
+│   ├── rules.py                    Wolfram rule encoding (0–255)
+│   ├── simulator.py                ECA simulator (vectorized NumPy)
+│   ├── metrics.py                  7 behavioral metrics
+│   └── reporting.py               Structured experiment summaries
 │
 ├── notebooks/
 │   └── 001_ca_rule_space_exploration.ipynb
 │
-├── tests/
-│   ├── test_rules.py
-│   ├── test_simulator.py
-│   └── test_metrics.py
+├── tests/                          119 pytest tests, all passing
 │
-└── docs/
-    ├── research-question.md
-    ├── methodology.md
-    └── references.md
+├── docs/
+│   ├── research-question.md        Scope, motivation, success criteria
+│   ├── methodology.md              Simulation design and metric definitions
+│   ├── references.md               Annotated bibliography (17 references)
+│   ├── ai-hypothesis-loop.md       v2 workflow design (8 stages, manual)
+│   ├── hypothesis-quality-checklist.md
+│   └── research-notes/
+│       ├── 001-first-hypothesis-review-comparison.md
+│       └── 002-publication-positioning.md
+│
+├── prompts/
+│   └── hypothesis-review.md        LLM submission prompt template (v2.0)
+│
+├── schemas/
+│   └── hypothesis_response.schema.json   JSON Schema for LLM responses
+│
+├── hypotheses/                     LLM response artifacts (versioned, labeled)
+│   ├── review_20260618_001.json    Claude Opus 4.8 Max — session 1
+│   ├── review_20260618_eca01.json  ChatGPT o3 — session 1
+│   └── review_20260618_comparison.md
+│
+└── examples/
+    └── hypothesis_response_example.json   Annotated example (not research data)
 ```
 
 ---
 
-## Current Status and Limitations
+## Known Limitations
 
-**What works in v1:**
-- Full simulation of all 256 Wolfram ECA rules
-- Seven behavioral metrics computed per rule
-- Space-time diagram visualization for any rule
-- Structured experiment summaries with explicit placeholders for LLM review
-- Pytest test suite for core functionality
-
-**Known limitations:**
-- Boundary condition: `fixed_zero` only (periodic boundary not yet implemented)
-- Initial condition: `single_seed` or `random` (no structured periodic seeds yet)
-- Grid size: 100 cells, 200 steps by default (fixed; configurable in-notebook)
-- Entropy metric: row-level density only; misses spatial block structure
-- Periodicity detection: may pick up boundary-induced cycles
-- No LLM integration in v1 — all interpretation fields are placeholders
-- Results are sensitive to grid size and step count; finite-size effects are not quantified
+- **Boundary condition:** `fixed_zero` only — periodic boundary not implemented
+- **Grid size:** 100 × 200 default — finite-size effects not quantified
+- **Entropy metric:** row-level density only — misses spatial block structure
+- **Periodicity score:** may detect boundary-induced cycles, not intrinsic periodicity
+- **Single run per configuration** — no multi-seed distributions yet
+- **Manual LLM loop** — no API integration; submission is copy-paste by design (v2); automation planned for v3 after validation
+- **One session completed** — results are preliminary and should not be interpreted as statistically reliable
 
 ---
 
-## Next Steps
+## Contributing
 
-The intended progression after v1:
+This is an open research workspace. The artifacts — prompt template, JSON schema, quality checklist, experiment summaries — are designed to be reusable and adaptable.
 
-1. **LLM hypothesis review** — Pass structured summaries to a SYNTRAN AIEOS agent for tentative behavioral classification and hypothesis generation.
-2. **Initial condition sensitivity** — Run selected rules under multiple random seeds and compare metric distributions.
-3. **Boundary sensitivity** — Compare `fixed_zero` vs. `periodic` for candidate rules.
-4. **Rule neighborhood search** — Study Hamming-distance neighbors in the rule-number space.
-5. **Data quality validation** — Add schema validation for experiment output artifacts.
+If you want to follow the investigation as it progresses, watch this repository. Research Notes are the primary trail of decisions and findings.
 
-See [PUBLICATION_CHECKLIST.md](PUBLICATION_CHECKLIST.md) before sharing any results externally.
+If you find an issue with the simulation, metrics, or governance logic, open an issue.
 
 ---
 
 ## References
 
-See [docs/references.md](docs/references.md) for the full reference list with source quality labels.
+See [docs/references.md](docs/references.md) for the full annotated bibliography.
 
 Key foundational references:
 
-- Wolfram, S. "Statistical mechanics of cellular automata," *Reviews of Modern Physics*, 1983.
-- Cook, M. "Universality in Elementary Cellular Automata," *Complex Systems*, 2004.
-- Langton, C. "Computation at the edge of chaos," *Physica D*, 1990.
+- Wolfram, S. "Statistical mechanics of cellular automata." *Reviews of Modern Physics*, 1983.
+- Cook, M. "Universality in Elementary Cellular Automata." *Complex Systems*, 2004.
+- Langton, C. "Computation at the edge of chaos." *Physica D*, 1990.

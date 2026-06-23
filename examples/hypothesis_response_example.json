@@ -1,0 +1,48 @@
+{
+  "_note": "ILLUSTRATIVE EXAMPLE ONLY. This file is not a research finding. The metric values are plausible approximations for demonstration purposes and have not been verified against an actual notebook run. Do not cite this file as evidence. See docs/ai-hypothesis-loop.md for the workflow and schemas/hypothesis_response.schema.json for the schema.",
+  "review_id": "review_example_001",
+  "source_summary_ids": [
+    "rule_030_single_seed",
+    "rule_090_single_seed",
+    "rule_110_single_seed"
+  ],
+  "candidate_rules": [30, 110],
+  "hypotheses": [
+    {
+      "hypothesis_id": "h001",
+      "rule_ids": [30],
+      "observation_basis": "Rule 30 (single_seed, n_cells=100, n_steps=200, fixed_zero boundary) shows compression_ratio=0.89, periodicity_score=0.0, and entropy_score=3.29. These values are among the highest in the submitted summary set and are consistent with a lack of spatial or temporal regularity.",
+      "hypothesis": "Rule 30's compression_ratio will remain above 0.80 when n_cells is increased from 100 to 500, with all other parameters held constant (single_seed, n_steps=200, fixed_zero boundary). If the low periodicity and high compression_ratio reflect an intrinsic property of the rule rather than a finite-size artifact, they should not collapse with a larger grid.",
+      "expected_result": "compression_ratio for Rule 30 at n_cells=500 will be >= 0.80.",
+      "test_plan": "Run simulate(30, n_cells=500, n_steps=200, initial_condition='single_seed') and compare compression_ratio against the n_cells=100 baseline.",
+      "metrics_to_compare": ["compression_ratio", "periodicity_score", "entropy_score"],
+      "confidence": "low",
+      "risk_of_overclaiming": "A single 100-cell run is insufficient to distinguish intrinsic rule behavior from finite-size effects. The fixed_zero boundary condition may suppress periodicity artificially, making any rule appear irregular near the boundary. 'Low periodicity' on a finite grid does not imply pseudo-random behavior in any formal sense.",
+      "status": "proposed"
+    },
+    {
+      "hypothesis_id": "h002",
+      "rule_ids": [90],
+      "observation_basis": "Rule 90 (single_seed, n_cells=100, n_steps=200, fixed_zero boundary) shows density_mean approximately 0.50 and periodicity_score=0.0. The Sierpinski-triangle structure visible under single_seed initial conditions is an expected result of the additive nature of Rule 90.",
+      "hypothesis": "Rule 90's density_mean under random initial conditions (random_seed=42, n_cells=100, n_steps=200, fixed_zero boundary) will be within ±0.05 of the single_seed result. Additive rules tend to produce long-run density that is determined by the rule rather than the initial condition.",
+      "expected_result": "density_mean for Rule 90 under random initial conditions will fall within the interval [0.45, 0.55].",
+      "test_plan": "Run simulate(90, n_cells=100, n_steps=200, initial_condition='random', random_seed=42) and compare density_mean against the single_seed baseline.",
+      "metrics_to_compare": ["density_mean", "density_final", "activity_score"],
+      "confidence": "medium",
+      "risk_of_overclaiming": "The additive property of Rule 90 is a mathematical fact, but its expression on a finite grid with a fixed_zero boundary is not guaranteed to produce convergent density values. The fixed_zero boundary breaks the additive symmetry at the edges. This claim may not hold for small grids.",
+      "status": "proposed"
+    },
+    {
+      "hypothesis_id": "h003",
+      "rule_ids": [110],
+      "observation_basis": "Rule 110 (single_seed, n_cells=100, n_steps=200, fixed_zero boundary) shows compression_ratio=0.72 and activity_score=0.38. These values are intermediate — neither as compressible as Rule 0 nor as incompressible as Rule 30 in this summary set.",
+      "hypothesis": "Rule 110's compression_ratio will decrease (grid becomes more compressible) if the initial transient is excluded by increasing n_steps to 1000, because Rule 110 may require more steps to reach its characteristic complex but structured behavior on a 100-cell grid.",
+      "expected_result": "compression_ratio for Rule 110 at n_steps=1000, n_cells=100, will be lower than the n_steps=200 baseline.",
+      "test_plan": "Run simulate(110, n_cells=100, n_steps=1000, initial_condition='single_seed') and compare compression_ratio against the n_steps=200 baseline.",
+      "metrics_to_compare": ["compression_ratio", "periodicity_score", "activity_score"],
+      "confidence": "low",
+      "risk_of_overclaiming": "The relationship between transient length and compression_ratio depends on the specific structure that emerges, which is not predictable from the current metrics alone. It is equally plausible that longer runs increase entropy and thus raise compression_ratio. This hypothesis could be wrong in either direction. The claim about 'characteristic complex behavior' is an interpretation not directly supported by the submitted metrics.",
+      "status": "proposed"
+    }
+  ]
+}
