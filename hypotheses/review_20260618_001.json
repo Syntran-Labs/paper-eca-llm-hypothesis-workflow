@@ -1,0 +1,55 @@
+{
+  "review_id": "review_20260618_001",
+  "source_summary_ids": [
+    "rule_059_single_seed",
+    "rule_115_single_seed",
+    "rule_025_single_seed",
+    "rule_067_single_seed",
+    "rule_097_single_seed",
+    "rule_041_single_seed",
+    "rule_083_single_seed",
+    "rule_027_single_seed",
+    "rule_107_single_seed",
+    "rule_121_single_seed"
+  ],
+  "candidate_rules": [59, 115, 25, 67, 97, 41, 83, 27, 107, 121],
+  "hypotheses": [
+    {
+      "hypothesis_id": "h001",
+      "rule_ids": [59, 115, 25, 67, 97, 41, 83, 27, 107, 121],
+      "observation_basis": "The ten summaries fall into five adjacent pairs whose metrics are near-identical. Rule 59 vs 115: density_mean 0.585075 vs 0.585124, transition_count both 35.3333, entropy_score both 3.243453, activity_score 0.8273 vs 0.8272, density_final both 0.65. Rule 25 vs 67: density_mean 0.458905 vs 0.458955. Rule 97 vs 41: density_mean 0.400697 vs 0.400796, entropy_score both 3.170633. Rule 83 vs 27: density_mean both 0.500796, entropy_score both 2.907294, density_final both 0.33. Rule 107 vs 121: density_mean 0.595274 vs 0.596866, activity_score 0.69285 vs 0.69205. periodicity_score is 0.0 for all ten.",
+      "hypothesis": "Each adjacent pair (59/115, 25/67, 97/41, 83/27, 107/121) consists of left-right mirror-equivalent rules: the 3-cell neighborhood lookup table of one is the reflection of the other (a property verifiable directly from the rule numbers, e.g. swapping the outputs for neighborhoods 110<->011 and 100<->001). If that is the mechanism, then under a reflection-symmetric initial condition the reflection-invariant row-level metrics — density_mean, density_final, transition_count, entropy_score, periodicity_score — should become exactly equal within each pair, because reversing every row of a spacetime diagram leaves those quantities unchanged. The residual differences seen now are predicted to come from single_seed sitting off-center on an even (100-cell) grid combined with fixed_zero edge effects, not from any genuine behavioral difference.",
+      "expected_result": "On an odd grid where single_seed lands on the true center cell, the within-pair differences in density_mean, density_final, transition_count, entropy_score, and periodicity_score should drop to ~0 (floating-point limited), versus the small nonzero differences observed on the 100-cell grid. compression_ratio differences should shrink but may not reach exactly 0, because a generic compressor is not invariant under string reversal.",
+      "test_plan": "For each rule call cellauto_lab.simulate(rule_number=R, n_cells=101, n_steps=200, initial_condition='single_seed', boundary_condition='fixed_zero', random_seed=42) and diff the paired metric vectors; optionally repeat at n_cells=201 and n_cells=401 to check that any even-grid residual also shrinks as grid size grows.",
+      "metrics_to_compare": ["density_mean", "density_final", "transition_count", "entropy_score", "periodicity_score", "activity_score", "compression_ratio"],
+      "confidence": "medium",
+      "risk_of_overclaiming": "The exact-equality prediction is untested and assumes (a) single_seed places one '1' on the true grid center for odd n_cells, and (b) activity_score is computed in a reflection-invariant way (density_mean, density_final, transition_count, and entropy_score are reflection-invariant by construction; activity_score's definition is not verified in this session). If simulate() seeds a fixed index rather than the geometric center, an odd grid will not fully symmetrize and equality may not be reached. Per the Known Limitations, fixed_zero may introduce edge artifacts that could prevent exact equality even with a centered seed. Mirror equivalence is a property of the rule encoding; a single simulation tests its behavioral consequence but cannot establish it on its own.",
+      "status": "proposed"
+    },
+    {
+      "hypothesis_id": "h002",
+      "rule_ids": [107, 121],
+      "observation_basis": "Among the five pairs, 107/121 is the loosest match. It agrees on density_mean (0.595274 vs 0.596866) and activity_score (0.69285 vs 0.69205) but diverges on density_final (0.4 vs 0.52), entropy_score (2.882525 vs 2.82086), and especially compression_ratio (0.027164 vs 0.040498, roughly a 1.5x difference). By contrast, the other four pairs agree on transition_count and entropy_score to 3-5 decimal places and on compression_ratio to within ~0.001.",
+      "hypothesis": "If 107/121 are a true mirror pair (h001), their larger present divergence is a finite-size / off-center-seed artifact that affects these two rules more than the other four pairs — i.e. their finite-time patterns depend more strongly on which side of center the single seed sits. The competing possibility is that 107 and 121 do not behave as reflections at this grid size and step count despite the lookup-table relationship. These are distinguished by whether the gaps close on a centered grid: if the divergence is a centering artifact, the 107/121 gaps in density_final, entropy_score, and compression_ratio should shrink to the ~0.001 magnitude seen in the other four pairs; if the gaps persist on a centered grid, the centering-artifact explanation is rejected.",
+      "expected_result": "On a centered odd grid, |density_final(107) - density_final(121)|, the entropy_score gap, and the compression_ratio gap each fall to roughly the magnitude observed in the four tighter pairs. Persistent gaps of the current size would falsify the centering-artifact explanation.",
+      "test_plan": "Run cellauto_lab.simulate() for rule 107 and rule 121 at n_cells=101 and n_cells=401 (initial_condition='single_seed', n_steps=200, boundary_condition='fixed_zero', random_seed=42), and additionally at n_steps=400 to check whether the gap is a transient that closes with more steps. Compare paired metrics against the four tighter pairs run at the same settings.",
+      "metrics_to_compare": ["density_final", "entropy_score", "compression_ratio", "transition_count", "density_mean"],
+      "confidence": "low",
+      "risk_of_overclaiming": "Speculative: a single run cannot separate centering artifact, transient, and genuine asymmetric dynamics. Per the Known Limitations, density_final is a single noisy snapshot and compression_ratio is a proxy that does not measure Kolmogorov complexity, so part of the observed gap may be measurement noise rather than dynamics. The test also depends on simulate() centering the seed on odd grids; if it does not, a null result is uninformative.",
+      "status": "proposed"
+    },
+    {
+      "hypothesis_id": "h003",
+      "rule_ids": [59, 115, 25, 67, 97, 41, 83, 27, 107, 121],
+      "observation_basis": "All ten density_mean values sit between 0.40 and 0.60, close to 0.5, while density_final is spread more widely (0.33 to 0.65). activity_score is high across the set (0.69 to 0.83) and transition_count is high (29.5 to 35.3). All ten rule numbers are odd.",
+      "hypothesis": "Because every listed rule is odd, each maps neighborhood 000->1, and each also maps 111->0 (both verifiable from the rule numbers), so any uniform region oscillates with period 2 between all-0 and all-1. This predicts a systematic even-vs-odd-step component in density: density measured at step N and at step N+1 should be substantially anti-correlated (a large uniform fraction flips each step), even though density_mean averaged over many steps stays near 0.5. The competing possibility is that seed-driven structure and fixed_zero boundaries have broken up uniform regions by step 200, leaving little period-2 density structure. These are distinguished by the size of the density swing between consecutive steps.",
+      "expected_result": "For each rule, density_final at n_steps=201 differs substantially from density_final at n_steps=200 (an anti-correlated swing on the order of ~0.2 or more), while density_mean stays near its current ~0.4-0.6 value. A near-unchanged density_final between consecutive steps would fail to support the period-2-background prediction.",
+      "test_plan": "For each rule call cellauto_lab.simulate(rule_number=R, n_cells=100, n_steps=201, initial_condition='single_seed', boundary_condition='fixed_zero', random_seed=42) and compare density_final to the existing n_steps=200 run; if the pipeline exposes the per-row density series, inspect its even/odd alternation directly.",
+      "metrics_to_compare": ["density_final", "density_mean"],
+      "confidence": "low",
+      "risk_of_overclaiming": "This leans on the 000->1 / 111->0 property read from the rule encoding, which the current metric set only reflects indirectly. With fixed_zero boundaries and an already-mixed pattern at step 200, large regions are not uniform, so the predicted clean period-2 swing may be heavily damped; a small swing would be ambiguous (consistent with boundaries/seed structure masking the oscillation rather than cleanly ruling it out). Per the Known Limitations, density_final depends on grid size, step count, and initial condition and is a single snapshot, making this test weaker than h001's.",
+      "status": "proposed"
+    }
+  ],
+  "review_notes": "The dominant structure in this batch is that the ten rules form five adjacent mirror pairs, so the within-pair similarity is expected under reflection equivalence rather than anomalous; the genuinely interesting outlier is the 107/121 pair, whose divergence is far larger than the other four pairs. The mirror relationship between rule numbers is stated as a derivable, checkable property of the lookup tables, not as an external citation; the simulations proposed test its behavioral consequences. No claim here should be read as establishing causality or validating a theorem from these single runs."
+}

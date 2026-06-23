@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://syntran-labs/cellauto-lab/schemas/hypothesis_response.schema.json",
+  "title": "HypothesisResponse",
+  "description": "Schema for LLM-generated hypothesis review responses produced by the cellauto-lab Manual AI Hypothesis Loop. All responses must conform to this schema before being recorded. See docs/ai-hypothesis-loop.md for the workflow and prompts/hypothesis-review.md for the prompt template.",
+  "type": "object",
+  "required": [
+    "review_id",
+    "source_summary_ids",
+    "candidate_rules",
+    "hypotheses"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "review_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for this review session. Recommended format: review_YYYYMMDD_NNN.",
+      "examples": ["review_20260618_001"]
+    },
+    "source_summary_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of experiment_id values from the summaries that were submitted for review. Must be non-empty."
+    },
+    "candidate_rules": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 255
+      },
+      "description": "Wolfram rule numbers (0–255) that the LLM flagged as anomalous or interesting based on the submitted summaries. May be empty if no rules were flagged."
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Hypothesis"
+      },
+      "description": "List of falsifiable hypotheses proposed by the LLM. May be empty if no hypothesis meeting quality standards could be proposed."
+    },
+    "review_notes": {
+      "type": "string",
+      "description": "Optional free-text notes from the LLM explaining why hypotheses could not be proposed, or recording any session-level observations. Only present when hypotheses is empty or when the LLM has session-level caveats."
+    }
+  },
+  "$defs": {
+    "Hypothesis": {
+      "type": "object",
+      "title": "Hypothesis",
+      "description": "A single falsifiable hypothesis proposed by the LLM based on one or more experiment summaries.",
+      "required": [
+        "hypothesis_id",
+        "rule_ids",
+        "observation_basis",
+        "hypothesis",
+        "expected_result",
+        "test_plan",
+        "metrics_to_compare",
+        "confidence",
+        "risk_of_overclaiming",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "hypothesis_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Short unique identifier for this hypothesis within the review session. Recommended format: h001, h002, etc.",
+          "examples": ["h001", "h002"]
+        },
+        "rule_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "description": "Wolfram rule numbers this hypothesis applies to. Must name at least one specific rule."
+        },
+        "observation_basis": {
+          "type": "string",
+          "minLength": 10,
+          "description": "The specific metric values or observations from the submitted summaries that this hypothesis is based on. Must reference named metrics and their values. Must not contain interpretation — only what was measured."
+        },
+        "hypothesis": {
+          "type": "string",
+          "minLength": 20,
+          "description": "The falsifiable claim, stated precisely. Must name specific rules, specific metrics, and a predicted direction of change. Must not use words like 'proves' or 'confirms'."
+        },
+        "expected_result": {
+          "type": "string",
+          "minLength": 10,
+          "description": "The specific metric value or comparison that the follow-up simulation should produce if the hypothesis is correct. Must be concrete enough to evaluate as confirmed or refuted."
+        },
+        "test_plan": {
+          "type": "string",
+          "minLength": 10,
+          "description": "The specific parameter change or simulate() call needed to test this hypothesis. Must reference concrete parameter values (n_cells, n_steps, initial_condition, boundary_condition, random_seed as applicable)."
+        },
+        "metrics_to_compare": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "density_mean",
+              "density_final",
+              "transition_count",
+              "activity_score",
+              "entropy_score",
+              "periodicity_score",
+              "compression_ratio"
+            ]
+          },
+          "description": "Named metrics from the v1 metric set that should be compared between baseline and follow-up to evaluate the hypothesis. Must use exact metric names from compute_metrics() output."
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "The LLM's stated confidence in this hypothesis. 'high' requires extreme metric values with no alternative explanation. 'medium' requires plausibility with untested factors. 'low' is appropriate for speculative or single-run claims."
+        },
+        "risk_of_overclaiming": {
+          "type": "string",
+          "minLength": 10,
+          "description": "An honest assessment of where this hypothesis might be misleading or wrong. Common risks: finite-size effects, boundary artifacts, transient behavior, single-initial-condition limitation."
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "proposed",
+            "accepted_for_testing",
+            "rejected",
+            "inconclusive"
+          ],
+          "description": "Review status. LLM responses must always return 'proposed'. Human reviewers update to 'accepted_for_testing', 'rejected', or 'inconclusive' after applying the hypothesis quality checklist."
+        },
+        "rejection_reason": {
+          "type": "string",
+          "description": "Required when status is 'rejected'. Records why the hypothesis was rejected during human review. Set by the human reviewer, not the LLM."
+        }
+      },
+      "if": {
+        "properties": {
+          "status": { "const": "rejected" }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["rejection_reason"]
+      }
+    }
+  }
+}
