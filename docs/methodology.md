@@ -7,7 +7,7 @@
 
 ## Overview
 
-`cellauto-lab` uses a notebook-first, metrics-driven methodology for exploring elementary cellular automata (ECA) rule space. The methodology is designed to be:
+`paper-eca-llm-hypothesis-workflow` uses a notebook-first, metrics-driven methodology for exploring elementary cellular automata (ECA) rule space. The methodology is designed to be:
 
 - **Reproducible**: all experiments use explicit parameters, fixed random seeds, and recorded metadata
 - **Auditable**: observations, metrics, and interpretations are stored separately

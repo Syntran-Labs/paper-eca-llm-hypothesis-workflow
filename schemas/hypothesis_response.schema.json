@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://syntran-labs/cellauto-lab/schemas/hypothesis_response.schema.json",
+  "$id": "https://syntran-labs/paper-eca-llm-hypothesis-workflow/schemas/hypothesis_response.schema.json",
   "title": "HypothesisResponse",
-  "description": "Schema for LLM-generated hypothesis review responses produced by the cellauto-lab Manual AI Hypothesis Loop. All responses must conform to this schema before being recorded. See docs/ai-hypothesis-loop.md for the workflow and prompts/hypothesis-review.md for the prompt template.",
+  "description": "Schema for LLM-generated hypothesis review responses produced by the paper-eca-llm-hypothesis-workflow Manual AI Hypothesis Loop. All responses must conform to this schema before being recorded. See docs/ai-hypothesis-loop.md for the workflow and prompts/hypothesis-review.md for the prompt template.",
   "type": "object",
   "required": [
     "review_id",

@@ -1,8 +1,8 @@
 # LLM Hypothesis Workflow — ECA Testbed
 
-**Project:** `cellauto-lab` · **Organization:** [SYNTRAN Labs](https://syntran.io)  
-**Status:** Open — Early Incubation · **Workflow:** SYNTRAN AIEOS  
-**Branch:** `main` is the current stable snapshot — see [Research Notes](docs/research-notes/) for the full trail
+**Project:** `paper-eca-llm-hypothesis-workflow` · **SYNTRAN Paper Lab** · Early Incubation  
+**Organization:** [SYNTRAN Labs](https://syntran.io) · **Workflow:** SYNTRAN AIEOS  
+**Internal package:** `cellauto_lab` · **Branch:** `main` is the current stable snapshot — see [Research Notes](docs/research-notes/) for the full trail
 
 ---
 
@@ -125,11 +125,13 @@ The project follows an explicit publication ladder (internal notes → GitHub Re
 
 ### Prerequisites
 
+Python 3.11+ required. No API keys. No external credentials.
+
 ```bash
-pip install numpy jupyter pytest
+pip install -e ".[dev]"
 ```
 
-Python 3.11+ required. No other dependencies. No API keys. No external credentials.
+This installs the `cellauto_lab` package in editable mode along with all dev dependencies (pytest, jupyter, matplotlib). No manual dependency tracking needed.
 
 ### Notebook
 

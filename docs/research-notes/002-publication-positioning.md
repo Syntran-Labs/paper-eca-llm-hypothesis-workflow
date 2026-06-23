@@ -34,7 +34,7 @@ The workflow requires a human operator at every stage: to run the notebook, to s
 ChatGPT 5.5 (high thinking) and Claude Opus 4.8 were compared on a single batch in one session. No statistically meaningful conclusions about relative capability can be drawn from this.
 
 **Not a production AI system.**
-`cellauto-lab` is an incubation research workspace. It is not a deployed tool, a library for others to use, or a system with reliability guarantees.
+`paper-eca-llm-hypothesis-workflow` is an incubation research workspace. It is not a deployed tool, a library for others to use, or a system with reliability guarantees.
 
 ---
 
